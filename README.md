@@ -5,8 +5,10 @@ Get In IT
 Minesweeper Contest
 
 
-![My image](https://github.com/ehrenberg/codesweeper/tree/master/img/screen.png)
-
+![My image]()
+<p>
+    <img src="https://raw.githubusercontent.com/ehrenberg/codesweeper/master/img/screen.jpg"/>
+</p>
 
 #License
 Under MIT License
