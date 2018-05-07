@@ -1,3 +1,12 @@
+/**
+ * JQuery Minesweeper for the get-in-it.de Minesweeper Competition
+ * 
+ * @author		Bastian Ehrenberg
+ * @since		02.05.2018
+ * @lastEdit	07.05.2018
+ * @license		MIT
+ * 
+ */
 (function($) {
 	/*
 	 * Eingaben
@@ -6,12 +15,12 @@
 		this._init(options);
 	};
 	$.extend(Listener,{
-			_EVENT_BUTTON_LEFT: 1,
-			_EVENT_BUTTON_RIGHT: 2,
-			_EVENT_BUTTON_BOTH: 3,
-			_EVENT_WHICH_LEFT: 1,
-			_EVENT_WHICH_RIGHT: 3,
-			_DEFAULT_SETTINGS: {
+		_EVENT_BUTTON_LEFT: 1,
+		_EVENT_BUTTON_RIGHT: 2,
+		_EVENT_BUTTON_BOTH: 3,
+		_EVENT_WHICH_LEFT: 1,
+		_EVENT_WHICH_RIGHT: 3,
+		_DEFAULT_SETTINGS: {
 		onCellLeftMouseDown: $.noop,
 		onCellRightMouseDown: $.noop,
 		onCellBothMouseDown: $.noop,
@@ -110,7 +119,6 @@
 	
 	/*
 	 * Smiley. Änderung des Status
-	 * 
 	 */
 	var Smiley = function(target, status) {
 		this._init(target, status);
@@ -203,14 +211,14 @@
 			this._$cells.removeClass().addClass(Board._STATE_CLASS + Board._STATE_NOT_MARKED);
 			this._arrFlags = {};
 			this._listener._reset();
-			this._started = !1
+			this._started = false
 		},
 		_start: function(mines, excludes) {
 			var board = this;
 			new MineGenerator(this._$cells.length, function(idx) {
 				board._setFlag(idx, Board._HAS_MINE);
 			})._generate(mines, excludes);
-			this._started = !0;
+			this._started = true;
 		},
 		_stop: function() {
 			this._listener._stop()
@@ -266,12 +274,12 @@
 		_isFixed: function(idx) {
 			var state = this._getState(idx);
 			if (state === Board._STATE_NOT_MARKED) {
-				return !1
+				return false
 			}
 			if (state === Board._STATE_UNCERTAIN) {
-				return !1
+				return false
 			}
-			return !0
+			return true
 		},
 		_press: function(idx) {
 			if (this._isFixed(idx)) {
@@ -342,7 +350,7 @@
 					generator._reserved.splice(i, 0, idx);
 					generator._emptyCells--;
 					generator._setMine(idx);
-					return !1
+					return false
 				} else {
 					++idx
 				}
@@ -382,7 +390,8 @@
 		_MINES_MIN: 10,
 		_TIMER_UPDATE_INTERVAL: '1s',
 		_TIMER_MAX_COUNT: 9999
-	}); $.extend(CodeSweeper.prototype, {
+	});
+	$.extend(CodeSweeper.prototype, {
 		_init: function(target, options) {
 			this._$target = $(target);
 			this._options = options;
@@ -468,9 +477,9 @@
 			this._$elemTimer.before('Zeit');
 			this._$btnRestart.text('Neustarten');
 			this._$btnRestart.click(function() {
-				game._resetGame()
+				game._resetGame();
 			});
-			this._resetGame()
+			this._resetGame();
 		},
 		_generateHtml: function() {
 			var idx;
@@ -494,107 +503,11 @@
 			
 			html += '</nobr>';
 			html += '</form>';
-			return html
-		},
-		_onCellLeftMouseDown: function(idx) {
-			this._board._press(idx)
-		},
-		_onCellLeftMouseOver: function(idx) {
-			this._board._press(idx)
-		},
-		_onCellLeftMouseOut: function(idx) {
-			this._board._release(idx)
-		},
-		_onCellLeftMouseUp: function(idx) {
-			if (!this._board._started) {
-				this._startGame(idx);
-			}
-			if (this._board._isFixed(idx)) {
-				return;
-			}
-			if (this._board._hasMine(idx)) {
-				this._explosion.push(idx);
-				this._gameOver();
-				return;
-			}
-			this._openSafe(idx);
-		},
-		_onCellRightMouseDown: function(idx) {
-			var mines;
-			if (this._board._isOpened(idx)) {
-				return
-			}
-			if (this._board._isNotMarked(idx)) {
-				this._board._setFlagged(idx);
-				mines = parseInt(this._$elemMines.text(), 10);
-				this._$elemMines.text(mines - 1)
-			} else if (this._board._isFlagged(idx)) {
-				this._board._setUncertain(idx);
-				mines = parseInt(this._$elemMines.text(), 10);
-				this._$elemMines.text(mines + 1)
-			} else if (this._board._isUncertain(idx)) {
-				this._board._setNotMarked(idx)
-			}
-		},
-		_onCellBothMouseDown: function(idx) {
-			var game = this;
-			$.each(this._neighbors(idx), function(i, neighbor) {
-				game._board._press(neighbor)
-			})
-		},
-		_onCellBothMouseOver: function(idx) {
-			var game = this;
-			$.each(this._neighbors(idx), function(i, neighbor) {
-				game._board._press(neighbor)
-			})
-		},
-		_onCellBothMouseOut: function(idx) {
-			var game = this;
-			$.each(this._neighbors(idx), function(i, neighbor) {
-				game._board._release(neighbor)
-			})
-		},
-		_onCellBothMouseUp: function(idx) {
-			var game = this;
-			$.each(this._neighbors(idx), function(i, neighbor) {
-				game._board._release(neighbor)
-			});
-			if (this._board._isHidden(idx)) {
-				return
-			}
-			var mineCount = this._board._getMineCount(idx);
-			var flagCount = 0;
-			var safe = [];
-			var explosion = [];
-			$.each(this._surroundings(idx), function(i, neighbor) {
-				if (game._board._isOpened(neighbor)) {
-					return
-				}
-				var flag = game._board._getFlag(neighbor);
-				if (flag & Board._HAS_FLAG) {
-					flagCount++;
-					return
-				}
-				if (flag & Board._HAS_MINE) {
-					explosion.push(neighbor);
-					return
-				}
-				safe.push(neighbor);
-			});
-			if (flagCount !== mineCount) {
-				return
-			}
-			$.each(safe, function(i, idx) {
-				game._openSafe(idx);
-			});
-			if (explosion.length > 0) {
-				this._explosion = explosion;
-				this._gameOver();
-			}
+			return html;
 		},
 		_resetGame: function() {
 			if ($.timer) {
-				this._$elemTimer.stopTime()
+				this._$elemTimer.stopTime();
 			}
 			this._$elemTimer.text("0");
 			this._unopened = this._cells - this._mines;
@@ -699,7 +612,7 @@
 			}, 1000);
 		},
 		_surroundings: function(idx) {
-			return this._neighbors(idx, !0);
+			return this._neighbors(idx, true);
 		},
 		_neighbors: function(idx, notme) {
 			var game = this;
@@ -721,10 +634,111 @@
 				});
 			});
 			return neighbors;
+		},
+		_onCellLeftMouseDown: function(idx) {
+			this._board._press(idx)
+		},
+		_onCellLeftMouseOver: function(idx) {
+			this._board._press(idx)
+		},
+		_onCellLeftMouseOut: function(idx) {
+			this._board._release(idx)
+		},
+		_onCellLeftMouseUp: function(idx) {
+			if (!this._board._started) {
+				this._startGame(idx);
+			}
+			if (this._board._isFixed(idx)) {
+				return;
+			}
+			if (this._board._hasMine(idx)) {
+				this._explosion.push(idx);
+				this._gameOver();
+				return;
+			}
+			this._openSafe(idx);
+		},
+		_onCellRightMouseDown: function(idx) {
+			var mines;
+			if (this._board._isOpened(idx)) {
+				return
+			}
+			if (this._board._isNotMarked(idx)) {
+				this._board._setFlagged(idx);
+				mines = parseInt(this._$elemMines.text(), 10);
+				this._$elemMines.text(mines - 1)
+			} else if (this._board._isFlagged(idx)) {
+				this._board._setUncertain(idx);
+				mines = parseInt(this._$elemMines.text(), 10);
+				this._$elemMines.text(mines + 1)
+			} else if (this._board._isUncertain(idx)) {
+				this._board._setNotMarked(idx)
+			}
+		},
+		_onCellBothMouseDown: function(idx) {
+			var game = this;
+			$.each(this._neighbors(idx), function(i, neighbor) {
+				game._board._press(neighbor)
+			})
+		},
+		_onCellBothMouseOver: function(idx) {
+			var game = this;
+			$.each(this._neighbors(idx), function(i, neighbor) {
+				game._board._press(neighbor)
+			})
+		},
+		_onCellBothMouseOut: function(idx) {
+			var game = this;
+			$.each(this._neighbors(idx), function(i, neighbor) {
+				game._board._release(neighbor)
+			})
+		},
+		_onCellBothMouseUp: function(idx) {
+			var game = this;
+			$.each(this._neighbors(idx), function(i, neighbor) {
+				game._board._release(neighbor)
+			});
+			if (this._board._isHidden(idx)) {
+				return
+			}
+			var mineCount = this._board._getMineCount(idx);
+			var flagCount = 0;
+			var safe = [];
+			var explosion = [];
+			$.each(this._surroundings(idx), function(i, neighbor) {
+				if (game._board._isOpened(neighbor)) {
+					return
+				}
+				var flag = game._board._getFlag(neighbor);
+				if (flag & Board._HAS_FLAG) {
+					flagCount++;
+					return
+				}
+				if (flag & Board._HAS_MINE) {
+					explosion.push(neighbor);
+					return
+				}
+				safe.push(neighbor);
+			});
+			if (flagCount !== mineCount) {
+				return
+			}
+			$.each(safe, function(i, idx) {
+				game._openSafe(idx);
+			});
+			if (explosion.length > 0) {
+				this._explosion = explosion;
+				this._gameOver();
+			}
 		}
-	}); $.codesweeper = {}; $.codesweeper.version = "1.0.0"; $.codesweeper.defaults = {
+	});
+	$.codesweeper = {};
+	$.codesweeper.defaults = {
 		difficulty: 'hard'
-	}; $.extend($.codesweeper.defaults); $.fn.codesweeper = function(options) {
+	};
+	$.extend($.codesweeper.defaults);
+	
+	$.fn.codesweeper = function(options) {
 		var options = $.extend({}, $.codesweeper.defaults, options || {});
 		return $(this).each(function() {
 			new CodeSweeper(this, options)._show();
