@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>jQuery Minesweeper</title>
+	<link rel="stylesheet" href="css/jquery.codesweeper.css" />
+	<link rel="stylesheet" href="css/pure-min.css" />
+	<link rel="stylesheet" href="css/jquery-ui.min.css" />
+	<link rel="stylesheet" href="css/flipclock.css" />
+	<script src="http://code.jquery.com/jquery.min.js"></script>
+	<script src="js/jquery-ui.min.js"></script>
+	<script src="js/jquery.timers.js"></script>
+	<script src="js/flipclock.min.js"></script>
+	<script src="js/jquery.codesweeper.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$("#tabs").tabs();
+		$('#btnCustom').click(function() {
+			$('#codesweeper').codesweeper({
+				difficulty : 'custom',
+				width : $('#txtWidth').val(),
+				height : $('#txtHeight').val(),
+				mines : $('#txtMines').val()
+			});
+		});
+
+	});
+	</script>
+	
+</head>
+<body>
+	<div id="content">
+		<img src="img/get-in-it.svg" alt="get in IT" width="250" height="150">
+		<h1>Codesweeper</h1>
+		<div id="tabs">
+		<ul>
+			<li><a href="#tabs-1">Leicht</a></li>
+			<li><a href="#tabs-2">Mittel</a></li>
+			<li><a href="#tabs-3">Hart</a></li>
+			<li><a href="#tabs-4">Eigenes Spiel erstellen</a></li>
+		</ul>
+		<div id="tabs-1">
+			<div id="codesweeper_easy"></div>
+			<script type="text/javascript">
+			$(function() {
+				$('#codesweeper_easy').codesweeper({
+					difficulty : 'easy'
+				});
+			});
+			</script>
+		</div>
+		<div id="tabs-2">
+			<div id="codesweeper_medium"></div>
+			<script type="text/javascript">
+			$(function() {
+				$('#codesweeper_medium').codesweeper({
+					difficulty : 'medium'
+				});
+			});
+			</script>
+		</div>
+		<div id="tabs-3">
+			<div id="codesweeper_hard"></div>
+			<script type="text/javascript">
+			$(function() {
+				$('#codesweeper_hard').codesweeper({
+					difficulty : 'hard'
+				});
+			});
+			</script>
+		</div>
+		<div id="tabs-4">
+			<form class="pure-form pure-form-aligned">
+				<div class="pure-control-group">
+					<label>Breite</label><input type="number" id="txtWidth" value="15" min="9" max="30"/>
+				</div>
+				<div class="pure-control-group">
+					<label>Höhe</label><input type="number" id="txtHeight" value="15" min="9" max="24" />
+				</div>
+				<div class="pure-control-group">
+					<label>Anzahl Minen</label><input type="number" id="txtMines" value="20" min="10" />
+				</div>
+				<div class="pure-control-group">
+					<button class="pure-button pure-button-primary" type="button" id="btnCustom">Spiel starten</button>
+				</div>
+			</form>
+			<br/>
+			<div id="codesweeper"></div>
+		</div>
+	</div>
+</body>
+</html>

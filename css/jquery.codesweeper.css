@@ -1,0 +1,163 @@
+* {
+	margin:0;
+	padding:0;
+}
+body {
+	background-image:url('../img/getit.png');
+}
+
+div#content {
+	background:rgba(255,255,255,0.9);
+	text-align:center;
+	margin:0em auto;
+	max-width:1200px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color:#6DAC2E;
+}
+
+
+div.codesweeper-head {
+}
+
+button.codesweeper-restart {
+	float:left;
+}
+span.codesweeper-smiley {
+	float:right;
+}
+
+span.codesweeper-smiley, span.codesweeper-mines, span.codesweeper-timer {
+	font-size:2em;
+	margin:0 2em 0 2em;
+}
+
+div.codesweeper-cells {
+	line-height: 0;
+}
+form.codesweeper-form {
+	margin-bottom:2em;
+}
+
+.codesweeper-mines, .codesweeper-timer {
+	background-color: #f2f5f9;
+	border: 1px solid #d3d3d3;
+	display: inline-block;
+	padding-right: 2px;
+	text-align: right;
+	width: 55px;
+}
+
+
+
+.codesweeper-cells span {
+	background-image: url("../img/cells.png");
+	display: inline-block;
+	height: 32px;
+	overflow: hidden;
+	width: 32px;
+	
+	opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 1s;
+	
+	
+	-webkit-transition:background-position .2s ease;  
+    -moz-transition:background-position .2s ease;  
+    -o-transition:background-position .2s ease;  
+    transition:background-position .2s ease;
+    
+}
+
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.codesweeper-state01 {
+	background-position: 0 0;
+}
+
+.codesweeper-state0f {
+	background-position: -32px 0;
+}
+
+.codesweeper-state0h {
+	background-position: -64px 0;
+}
+
+.codesweeper-state10 {
+	background-position: 0 -32px;
+}
+
+.codesweeper-state11 {
+	background-position: -32px -32px;
+}
+
+.codesweeper-state12 {
+	background-position: -64px -32px;
+}
+
+.codesweeper-state13 {
+	background-position: 0 -64px;
+}
+
+.codesweeper-state14 {
+	background-position: -32px -64px;
+}
+
+.codesweeper-state15 {
+	background-position: -64px -64px;
+}
+
+.codesweeper-state16 {
+	background-position: 0 -96px;
+}
+
+.codesweeper-state17 {
+	background-position: -32px -96px;
+}
+
+.codesweeper-state18 {
+	background-position: 32px;
+}
+
+.codesweeper-state19 {
+	background-position: 0 -128px;
+}
+
+.codesweeper-state1a {
+	background-position: -32px -128px;
+}
+
+.codesweeper-state1b {
+	background-position: -64px -128px;
+}
+
+.codesweeper-smiley {
+	background-image: url("../img/smiley.png");
+	display: inline-block;
+	height: 60px;
+	overflow: hidden;
+	width: 60px;
+}
+
+.codesweeper-smiley.smiley-state01 {
+	background-position: top left;
+}
+.codesweeper-smiley.smiley-state02 {
+	background-position: top right;
+}
+.codesweeper-smiley.smiley-state03 {
+	background-position: bottom left;
+}
+.codesweeper-smiley.smiley-state04 {
+	background-position: bottom right;
+}
