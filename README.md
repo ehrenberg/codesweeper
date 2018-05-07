@@ -5,6 +5,9 @@ Get In IT
 Minesweeper Contest
 
 
+![My image](https://github.com/ehrenberg/codesweeper/tree/master/img/screen.png)
+
+
 #License
 Under MIT License
 
